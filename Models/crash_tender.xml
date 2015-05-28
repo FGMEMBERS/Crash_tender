@@ -1,0 +1,159 @@
+<?xml version="1.0"?>
+<!-- (C) 2008  Anders Gidenstam.
+     Distribution: GPL v2 or later.
+-->
+<PropertyList>
+
+ <path>hoskosh-ti-1500.ac</path>
+ <!-- x/y/z == back/right/up -->
+
+ <particlesystem>
+  <name>FoamBeam</name>
+  <type>normal</type>
+  <texture>foam.png</texture>
+  <emissive>false</emissive>
+  <lighting>false</lighting>
+
+  <condition>
+   <property>sim/multiplay/generic/int[0]</property>
+  </condition>
+
+  <offsets>
+   <x-m>-4.5</x-m>
+   <y-m>0</y-m>
+   <z-m>3.5</z-m>
+  </offsets>
+
+  <attach>world</attach>
+  <placer>
+   <type>point</type>
+  </placer>
+
+  <shooter>
+   <theta-min-deg>75.25</theta-min-deg>
+   <theta-max-deg>75.75</theta-max-deg>
+   <phi-min-deg>179.75</phi-min-deg>
+   <phi-max-deg>180.25</phi-max-deg>
+   <speed-mps>
+    <value>25</value>
+    <spread>0</spread>
+   </speed-mps>
+  </shooter>
+
+  <counter>
+   <particles-per-sec>
+    <value>25.0</value>
+    <spread>0</spread>
+   </particles-per-sec>
+  </counter>
+
+  <align>billboard</align>
+
+  <particle>
+   <start>
+    <color>
+     <red><value>1.0</value></red>
+     <green><value>1.0</value></green>
+     <blue><value>1.0</value></blue>
+     <alpha><value>1</value></alpha>
+    </color>
+    <size>
+     <value>0.2</value>
+     <spread>0</spread>
+    </size>
+   </start>
+   <end>
+    <color>
+     <red><value>1.0</value></red>
+     <green><value>1.0</value></green>
+     <blue><value>1.0</value></blue>
+     <alpha><value>0.8</value></alpha>
+    </color>
+    <size>
+     <value>1.5</value>
+     <spread>0.125</spread>
+    </size>
+   </end>
+
+   <life-sec>
+    <value>1.5</value>
+   </life-sec>
+   <mass-kg>4</mass-kg>
+   <radius-m>0.2</radius-m>
+  </particle>
+
+  <program>
+   <fluid>air</fluid>
+   <gravity>true</gravity>
+   <wind>false</wind>
+  </program>
+
+ </particlesystem>
+
+ <animation>
+  <type>rotate</type>
+  <object-name>wheelLF</object-name>
+  <property>surface-positions/rudder-pos-norm</property>
+  <interpolation>
+   <entry>
+    <ind>-1.0</ind>
+    <dep>30</dep>
+   </entry>
+   <entry>
+    <ind>0</ind>
+    <dep>0</dep>
+   </entry>
+   <entry>
+    <ind>1.0</ind>
+    <dep>-30</dep>
+   </entry>
+  </interpolation>
+  <center>
+   <x-m>-2.65</x-m>
+   <y-m>-1.0</y-m>
+   <z-m>0.0</z-m>
+  </center>
+  <axis>
+   <x>0.0</x>
+   <y>0.0</y>
+   <z>1.0</z>
+  </axis>
+ </animation>
+ <animation>
+  <type>rotate</type>
+  <object-name>wheelRF</object-name>
+  <property>surface-positions/rudder-pos-norm</property>
+  <interpolation>
+   <entry>
+    <ind>-1.0</ind>
+    <dep>30</dep>
+   </entry>
+   <entry>
+    <ind>0</ind>
+    <dep>0</dep>
+   </entry>
+   <entry>
+    <ind>1.0</ind>
+    <dep>-30</dep>
+   </entry>
+  </interpolation>
+  <center>
+   <x-m>-2.65</x-m>
+   <y-m> 1.0</y-m>
+   <z-m>0.0</z-m>
+  </center>
+  <axis>
+   <x>0.0</x>
+   <y>0.0</y>
+   <z>1.0</z>
+  </axis>
+ </animation>
+ 
+
+ <animation>
+  <type>range</type>
+  <min-m>0</min-m>
+  <max-m>5000</max-m>
+ </animation>
+
+</PropertyList>

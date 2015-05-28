@@ -1,0 +1,171 @@
+<?xml version="1.0"?>
+<!-- $Id: crash_tender-set.xml,v 1.8 2010-01-19 21:40:53 anders Exp $ -->
+<!--
+  Crash tender / fire truck model for FlightGear.
+
+  Copyright (C) 2007 - 2010  Anders Gidenstam  (anders(at)gidenstam.org)
+  This file is licensed under the GPL license version 2 or later.
+
+  The 3d model is by Alexis Bory.
+-->
+<PropertyList>
+
+ <sim>
+
+  <description>Crash tender</description>
+  <author>Anders Gidenstam, Alexis Bory (3d model)</author>
+  <status>experimental</status>
+  <aircraft-version>0.1</aircraft-version>
+
+  <flight-model>jsb</flight-model>
+  <aero>crash_tender</aero>
+
+  <presets>
+   <onground>true</onground>
+  </presets>
+
+  <startup>
+   <splash-texture>Aircraft/Crash_tender/crash_tender-splash.jpg</splash-texture>
+  </startup>
+        
+  <sound>
+   <audible>false</audible>
+   <path/>
+  </sound>
+
+  <model>
+   <path>Aircraft/Crash_tender/Models/crash_tender.xml</path>
+  </model>
+
+  <submodels>
+   <serviceable type="bool">true</serviceable>
+   <path>Aircraft/Crash_tender/Models/crash_tender-submodels.xml</path>
+  </submodels>
+ 
+  <systems>
+
+   <electrical>
+    <path/>
+   </electrical>
+
+   <static>
+   </static>
+
+  </systems>
+  <instrumentation>
+   <path/>
+  </instrumentation>
+
+  <view n="0">
+   <internal archive="y">true</internal>
+   <config>
+    <!-- x/y/z == right/up/back -->
+    <x-offset-m archive="y"> 0.7</x-offset-m>
+    <y-offset-m archive="y"> 2.6</y-offset-m>
+    <z-offset-m archive="y">-4.45</z-offset-m>
+    <pitch-offset-deg>-5</pitch-offset-deg>
+    <default-field-of-view-deg type="double">65.0</default-field-of-view-deg>
+   </config>
+  </view>
+
+  <chase-distance-m type="double" archive="y">-25.0</chase-distance-m>
+
+  <multiplay>
+   <generic>
+    <!-- Beam trigger -->
+    <int n="0" type="int">0</int>
+   </generic>
+  </multiplay>
+
+  <help>
+   <key>
+    <name>,</name>
+    <desc>Brakes.</desc>
+   </key>
+   <key>
+    <name>.</name>
+    <desc>Accelerator.</desc>
+   </key>
+   <key>
+    <name>Joystick trigger</name>
+    <desc>Enable foam projector.</desc>
+   </key>
+   <key>
+    <name>shift + B</name>
+    <desc>Toggle parking brake.</desc>
+   </key>
+   <key>
+    <name>f</name>
+    <desc>Fire foam projector.</desc>
+   </key>
+  </help>
+
+ </sim>
+
+ <nasal>
+  <BeamControl>
+   <script>
+######################################################################
+controls.trigger = func (b) {
+  setprop("/sim/multiplay/generic/int[0]", b);
+  if (b) {
+    settimer(func {
+      if (getprop("/sim/multiplay/generic/int[0]"))
+        setprop("/tmp/foam-trigger", 1);
+    }, 2);
+  } else {
+    setprop("/tmp/foam-trigger", 0);
+  }
+};
+######################################################################
+var resolve_impact = func (n) {
+  print("Foam impact!");
+  var node = props.globals.getNode(n.getValue());
+  var pos  = geo.Coord.new().set_latlon
+                 (node.getNode("impact/latitude-deg").getValue(),
+                  node.getNode("impact/longitude-deg").getValue(),
+                  node.getNode("impact/elevation-m").getValue());
+  wildfire.resolve_foam_drop(pos, 10, 0);
+}
+setlistener("/sim/ai/aircraft/impact/foam", resolve_impact); 
+print("Wildfire integration ... initialized.");
+######################################################################
+   </script>
+  </BeamControl>
+ </nasal>
+
+ <input>
+  <keyboard>
+   <key n="82">
+    <name>R</name>
+    <desc>Toggle reverse gear.</desc>
+    <binding>
+     <command>nasal</command>
+     <script>
+      var dir = "/fdm/jsbsim/propulsion/engine/yaw-angle-rad";
+      setprop(dir, (getprop(dir) == 0) ? 3.14159265 : 0.0);
+     </script>
+    </binding>
+   </key>
+   <key n="102">
+    <name>f</name>
+    <desc>Fire foam projector.</desc>
+    <binding>
+     <command>nasal</command>
+     <script>
+      controls.trigger(1);
+     </script>
+    </binding>
+    <mod-up>
+     <binding>
+      <command>nasal</command>
+      <script>
+       controls.trigger(0);
+      </script>
+     </binding>
+    </mod-up>
+   </key>
+  </keyboard>
+ </input>
+
+</PropertyList>
